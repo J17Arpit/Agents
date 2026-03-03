@@ -1,32 +1,11 @@
 import 'dotenv/config';
 import readline from 'node:readline';
+import { callTool, ToolName } from './tools';
 import OpenAI from 'openai';
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-type ToolName = 'getTime' | 'getWeather';
-
-type ToolCall = {
-  name: ToolName;
-  arguments: Record<string, unknown>;
-};
-
-async function callTool(toolCall: ToolCall): Promise<string> {
-  switch (toolCall.name) {
-    case 'getTime': {
-      const now = new Date();
-      return `The current time is ${now.toLocaleTimeString()}.`;
-    }
-    case 'getWeather': {
-      const city = String(toolCall.arguments.city ?? 'your location');
-      return `I don't have real weather data, but let's imagine it's sunny in ${city}.`;
-    }
-    default:
-      return 'Unknown tool.';
-  }
-}
 
 const rl = readline.createInterface({
   input: process.stdin,
